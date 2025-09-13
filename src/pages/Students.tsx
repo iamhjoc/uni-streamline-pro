@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Eye, Edit, User, BookOpen, Calendar, Phone, Mail } from "lucide-react";
+import { StudentCharts } from "@/components/StudentCharts";
 
 const Students = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -98,6 +99,9 @@ const Students = () => {
         <h1 className="text-3xl font-bold text-foreground mb-2">Student Records</h1>
         <p className="text-muted-foreground">Manage student information and academic records</p>
       </div>
+
+      {/* Student Analytics Charts */}
+      <StudentCharts />
 
       {/* Search and Filters */}
       <Card className="border-0 shadow-card">
