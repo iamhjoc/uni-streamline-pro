@@ -13,7 +13,11 @@ import {
   X,
   BookOpen,
   Settings,
-  TrendingUp
+  TrendingUp,
+  Trophy,
+  Briefcase,
+  Zap,
+  DollarSign
 } from "lucide-react";
 
 interface LayoutProps {
@@ -21,15 +25,20 @@ interface LayoutProps {
 }
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: Home },
+  { name: "Student Dashboard", href: "/student-dashboard", icon: Users },
   { name: "Admissions", href: "/admissions", icon: Users },
   { name: "Students", href: "/students", icon: BookOpen },
   { name: "Fee Management", href: "/fees", icon: CreditCard },
   { name: "Payments", href: "/payments", icon: CreditCard },
+  { name: "Gamification", href: "/gamification", icon: Trophy },
+  { name: "Placement Connect", href: "/placement", icon: Briefcase },
   { name: "Hostel Management", href: "/hostel", icon: Building2 },
   { name: "Examinations", href: "/exams", icon: GraduationCap },
   { name: "Course Seats", href: "/course-seats", icon: Settings },
   { name: "Analytics", href: "/analytics", icon: TrendingUp },
+  { name: "Future Tech", href: "/future-tech", icon: Zap },
+  { name: "Pricing", href: "/pricing", icon: DollarSign },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export default function Layout({ children }: LayoutProps) {

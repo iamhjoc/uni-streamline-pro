@@ -14,7 +14,123 @@ const razorpayKeySecret = Deno.env.get('RAZORPAY_KEY_SECRET')!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-serve(async (req) => {
+-- Create predictive analytics functions
+CREATE OR REPLACE FUNCTION public.calculate_dropout_risk(student_cgpa DECIMAL, attendance_percentage INTEGER)
+RETURNS TEXT AS $$
+BEGIN
+  IF attendance_percentage < 75 OR student_cgpa < 6.0 THEN
+    RETURN 'High Risk';
+  ELSIF attendance_percentage < 85 OR student_cgpa < 7.0 THEN
+    RETURN 'Medium Risk';
+  ELSE
+    RETURN 'Low Risk';
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create student performance tracking table
+CREATE TABLE public.student_performance (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id TEXT NOT NULL,
+  student_name TEXT NOT NULL,
+  cgpa DECIMAL(3,2) NOT NULL,
+  attendance_percentage INTEGER NOT NULL,
+  dropout_risk TEXT GENERATED ALWAYS AS (
+    CASE 
+      WHEN attendance_percentage < 75 OR cgpa < 6.0 THEN 'High Risk'
+      WHEN attendance_percentage < 85 OR cgpa < 7.0 THEN 'Medium Risk'
+      ELSE 'Low Risk'
+    END
+  ) STORED,
+  last_updated TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Enable RLS
+ALTER TABLE public.student_performance ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Everyone can view student performance" 
+ON public.student_performance 
+FOR SELECT 
+USING (true);
+
+CREATE POLICY "Everyone can manage student performance" 
+ON public.student_performance 
+FOR ALL 
+USING (true);
+
+-- Insert sample performance data
+INSERT INTO public.student_performance (student_id, student_name, cgpa, attendance_percentage) VALUES
+('STU001', 'Rahul Sharma', 8.5, 92),
+('STU002', 'Priya Patel', 9.2, 95),
+('STU003', 'Amit Kumar', 7.8, 88),
+('STU004', 'Sneha Singh', 8.9, 78),
+('STU005', 'Vikash Yadav', 8.1, 85),
+('STU006', 'Ravi Gupta', 6.2, 72),
+('STU007', 'Anjali Reddy', 5.8, 68),
+('STU008', 'Kiran Joshi', 7.5, 82);
+
+-- Create gamification tables
+CREATE TABLE public.student_points (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id TEXT NOT NULL,
+  student_name TEXT NOT NULL,
+  total_points INTEGER DEFAULT 0,
+  level_points INTEGER DEFAULT 0,
+  current_level INTEGER DEFAULT 1,
+  badges_earned INTEGER DEFAULT 0,
+  streak_days INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE public.student_badges (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id TEXT NOT NULL,
+  badge_name TEXT NOT NULL,
+  badge_description TEXT,
+  points_awarded INTEGER DEFAULT 0,
+  earned_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Enable RLS for gamification tables
+ALTER TABLE public.student_points ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.student_badges ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for gamification
+CREATE POLICY "Everyone can view points" ON public.student_points FOR SELECT USING (true);
+CREATE POLICY "Everyone can manage points" ON public.student_points FOR ALL USING (true);
+
+CREATE POLICY "Everyone can view badges" ON public.student_badges FOR SELECT USING (true);
+CREATE POLICY "Everyone can manage badges" ON public.student_badges FOR ALL USING (true);
+
+-- Insert sample gamification data
+INSERT INTO public.student_points (student_id, student_name, total_points, level_points, current_level, badges_earned, streak_days) VALUES
+('STU001', 'Rahul Sharma', 2450, 450, 12, 8, 15),
+('STU002', 'Priya Patel', 3250, 250, 16, 12, 22),
+('STU003', 'Amit Kumar', 2890, 390, 14, 10, 18),
+('STU004', 'Sneha Singh', 2320, 320, 11, 7, 12),
+('STU005', 'Vikash Yadav', 2180, 180, 10, 6, 8);
+
+INSERT INTO public.student_badges (student_id, badge_name, badge_description, points_awarded) VALUES
+('STU001', 'Perfect Attendance', '100% attendance for a month', 100),
+('STU001', 'Assignment Ace', 'Submitted 10 assignments on time', 75),
+('STU001', 'Study Streak', '15 consecutive days of activity', 100),
+('STU002', 'Code Master', 'Won a coding competition', 150),
+('STU002', 'Perfect Attendance', '100% attendance for a month', 100),
+('STU003', 'Team Player', 'Completed 5 group projects', 75);
+
+-- Create triggers for automatic updates
+CREATE TRIGGER update_student_performance_updated_at
+BEFORE UPDATE ON public.student_performance
+FOR EACH ROW
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_student_points_updated_at
+BEFORE UPDATE ON public.student_points
+FOR EACH ROW
+EXECUTE FUNCTION public.update_updated_at_column();
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
