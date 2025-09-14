@@ -11,7 +11,8 @@ import {
   Menu,
   X,
   BookOpen,
-  Settings
+  Settings,
+  TrendingUp
 } from "lucide-react";
 
 interface LayoutProps {
@@ -26,6 +27,7 @@ const navigation = [
   { name: "Hostel Management", href: "/hostel", icon: Building2 },
   { name: "Examinations", href: "/exams", icon: GraduationCap },
   { name: "Course Seats", href: "/course-seats", icon: Settings },
+  { name: "Analytics", href: "/analytics", icon: TrendingUp },
 ];
 
 export default function Layout({ children }: LayoutProps) {
@@ -71,17 +73,17 @@ export default function Layout({ children }: LayoutProps) {
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
-                <Link
+                  <Link
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 hover:translate-x-1",
                     isActive
-                      ? "bg-gradient-primary text-primary-foreground shadow-card"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                      ? "bg-gradient-primary text-primary-foreground shadow-card animate-pulse"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent hover:shadow-glow"
                   )}
                 >
-                  <item.icon className="w-5 h-5" />
+                  <item.icon className="w-5 h-5 transition-transform duration-300 hover:rotate-12" />
                   {item.name}
                 </Link>
               );

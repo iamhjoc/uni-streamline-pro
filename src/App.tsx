@@ -11,6 +11,7 @@ import Fees from "./pages/Fees";
 import Hostel from "./pages/Hostel";
 import Exams from "./pages/Exams";
 import CourseSeats from "./pages/CourseSeats";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/hostel" element={<Layout><Hostel /></Layout>} />
           <Route path="/exams" element={<Layout><Exams /></Layout>} />
           <Route path="/course-seats" element={<Layout><CourseSeats /></Layout>} />
+          <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
