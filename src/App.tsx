@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Admissions from "./pages/Admissions";
 import Students from "./pages/Students";
 import Fees from "./pages/Fees";
+import Payments from "./pages/Payments";
 import Hostel from "./pages/Hostel";
 import Exams from "./pages/Exams";
 import CourseSeats from "./pages/CourseSeats";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/admissions" element={<Layout><Admissions /></Layout>} />
           <Route path="/students" element={<Layout><Students /></Layout>} />
           <Route path="/fees" element={<Layout><Fees /></Layout>} />
+          <Route path="/payments" element={<Layout><Payments /></Layout>} />
           <Route path="/hostel" element={<Layout><Hostel /></Layout>} />
           <Route path="/exams" element={<Layout><Exams /></Layout>} />
           <Route path="/course-seats" element={<Layout><CourseSeats /></Layout>} />

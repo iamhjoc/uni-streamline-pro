@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Plus, Eye, Edit, FileText, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { validateFormData } from "@/lib/validation";
 
 const Admissions = () => {
   const { toast } = useToast();
@@ -40,6 +41,24 @@ const Admissions = () => {
 
   const handleSubmitApplication = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const name = formData.get('fullName') as string;
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+
+    // Validate form data for spam
+    const validation = validateFormData({ name, email, phone });
+    
+    if (!validation.isValid) {
+      toast({
+        title: "Invalid Information",
+        description: validation.errors.join(' '),
+        variant: "destructive"
+      });
+      return;
+    }
+
     toast({
       title: "Application Submitted",
       description: "New admission application has been submitted successfully.",
@@ -166,15 +185,37 @@ const Admissions = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Full Name *</Label>
-                    <Input id="fullName" required placeholder="Enter student's full name" />
+                    <Input 
+                      id="fullName" 
+                      name="fullName"
+                      required 
+                      placeholder="Enter student's full name"
+                      pattern="[A-Za-z\s\-\.\']+"
+                      title="Please enter a valid name (letters, spaces, hyphens, and apostrophes only)"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address *</Label>
-                    <Input id="email" type="email" required placeholder="student@email.com" />
+                    <Input 
+                      id="email" 
+                      name="email"
+                      type="email" 
+                      required 
+                      placeholder="student@email.com"
+                      pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                      title="Please enter a valid email address"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number *</Label>
-                    <Input id="phone" required placeholder="+91 9876543210" />
+                    <Input 
+                      id="phone" 
+                      name="phone"
+                      required 
+                      placeholder="+91 9876543210"
+                      pattern="[\+]?[0-9]{10,15}"
+                      title="Please enter a valid phone number (10-15 digits)"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="dateOfBirth">Date of Birth *</Label>

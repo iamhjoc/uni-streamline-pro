@@ -85,6 +85,12 @@ const Students = () => {
     return "text-destructive";
   };
 
+  const handleStudentClick = (student: any) => {
+    // Handle student profile view/edit
+    console.log('Opening student profile for:', student.name);
+    // You can add navigation to student detail page or open modal here
+  };
+
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          student.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -145,9 +151,12 @@ const Students = () => {
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center">
+                  <button 
+                    onClick={() => handleStudentClick(student)}
+                    className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center hover:scale-110 transition-all duration-300 cursor-pointer shadow-card hover:shadow-glow button-load-animation"
+                  >
                     <User className="w-6 h-6 text-primary-foreground" />
-                  </div>
+                  </button>
                   <div>
                     <h3 className="font-semibold text-foreground">{student.name}</h3>
                     <p className="text-sm text-muted-foreground">{student.id}</p>

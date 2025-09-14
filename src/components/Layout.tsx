@@ -25,6 +25,7 @@ const navigation = [
   { name: "Admissions", href: "/admissions", icon: Users },
   { name: "Students", href: "/students", icon: BookOpen },
   { name: "Fee Management", href: "/fees", icon: CreditCard },
+  { name: "Payments", href: "/payments", icon: CreditCard },
   { name: "Hostel Management", href: "/hostel", icon: Building2 },
   { name: "Examinations", href: "/exams", icon: GraduationCap },
   { name: "Course Seats", href: "/course-seats", icon: Settings },

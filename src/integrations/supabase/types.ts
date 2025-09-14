@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      fee_items: {
+        Row: {
+          academic_year: string
+          amount: number
+          created_at: string
+          due_date: string
+          fee_type: string
+          id: string
+          status: string
+          student_name: string
+          updated_at: string
+        }
+        Insert: {
+          academic_year: string
+          amount: number
+          created_at?: string
+          due_date: string
+          fee_type: string
+          id?: string
+          status?: string
+          student_name: string
+          updated_at?: string
+        }
+        Update: {
+          academic_year?: string
+          amount?: number
+          created_at?: string
+          due_date?: string
+          fee_type?: string
+          id?: string
+          status?: string
+          student_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          razorpay_signature: string | null
+          status: string
+          student_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          razorpay_signature?: string | null
+          status?: string
+          student_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          razorpay_signature?: string | null
+          status?: string
+          student_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
