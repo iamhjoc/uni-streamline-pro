@@ -19,26 +19,27 @@ import {
   Zap,
   DollarSign
 } from "lucide-react";
+import { AnimatedIcon } from "@/components/AnimatedIcon";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const navigation = [
-  { name: "Student Dashboard", href: "/student-dashboard", icon: Users },
-  { name: "Admissions", href: "/admissions", icon: Users },
-  { name: "Students", href: "/students", icon: BookOpen },
-  { name: "Fee Management", href: "/fees", icon: CreditCard },
-  { name: "Payments", href: "/payments", icon: CreditCard },
-  { name: "Gamification", href: "/gamification", icon: Trophy },
-  { name: "Placement Connect", href: "/placement", icon: Briefcase },
-  { name: "Hostel Management", href: "/hostel", icon: Building2 },
-  { name: "Examinations", href: "/exams", icon: GraduationCap },
-  { name: "Course Seats", href: "/course-seats", icon: Settings },
-  { name: "Analytics", href: "/analytics", icon: TrendingUp },
-  { name: "Future Tech", href: "/future-tech", icon: Zap },
-  { name: "Pricing", href: "/pricing", icon: DollarSign },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Student Dashboard", href: "/student-dashboard", icon: Users, glow: "primary" as const },
+  { name: "Admissions", href: "/admissions", icon: Users, glow: "success" as const },
+  { name: "Students", href: "/students", icon: BookOpen, glow: "accent" as const },
+  { name: "Fee Management", href: "/fees", icon: CreditCard, glow: "warning" as const },
+  { name: "Payments", href: "/payments", icon: CreditCard, glow: "success" as const },
+  { name: "Gamification", href: "/gamification", icon: Trophy, glow: "accent" as const },
+  { name: "Placement Connect", href: "/placement", icon: Briefcase, glow: "primary" as const },
+  { name: "Hostel Management", href: "/hostel", icon: Building2, glow: "accent" as const },
+  { name: "Examinations", href: "/exams", icon: GraduationCap, glow: "warning" as const },
+  { name: "Course Seats", href: "/course-seats", icon: Settings, glow: "primary" as const },
+  { name: "Analytics", href: "/analytics", icon: TrendingUp, glow: "success" as const },
+  { name: "Future Tech", href: "/future-tech", icon: Zap, glow: "accent" as const },
+  { name: "Pricing", href: "/pricing", icon: DollarSign, glow: "warning" as const },
+  { name: "Settings", href: "/settings", icon: Settings, glow: "primary" as const },
 ];
 
 export default function Layout({ children }: LayoutProps) {
@@ -63,12 +64,18 @@ export default function Layout({ children }: LayoutProps) {
         <div className="flex h-full flex-col">
           {/* Logo and close button */}
           <div className="flex h-16 items-center justify-between px-6 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-foreground">Smart Link</span>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center animate-card-float">
+              <AnimatedIcon 
+                icon={GraduationCap} 
+                className="w-5 h-5 text-primary-foreground" 
+                glowType="primary"
+                animationType="pulse"
+                delay={500}
+              />
             </div>
+            <span className="text-xl font-bold text-foreground">Smart Link</span>
+          </div>
             <Button
               variant="ghost"
               size="sm"
@@ -81,20 +88,26 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2">
-            {navigation.map((item) => {
+            {navigation.map((item, index) => {
               const isActive = location.pathname === item.href;
               return (
                   <Link
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 hover:translate-x-1",
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 hover:translate-x-1 card-3d",
                     isActive
                       ? "bg-gradient-primary text-primary-foreground shadow-card animate-pulse"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent hover:shadow-glow"
                   )}
                 >
-                  <item.icon className="w-5 h-5 transition-transform duration-300 hover:rotate-12" />
+                  <AnimatedIcon 
+                    icon={item.icon} 
+                    className="w-5 h-5" 
+                    glowType={item.glow}
+                    animationType="float"
+                    delay={index * 100}
+                  />
                   {item.name}
                 </Link>
               );

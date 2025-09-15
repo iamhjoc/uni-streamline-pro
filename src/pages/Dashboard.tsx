@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, CreditCard, Building2, GraduationCap, TrendingUp, AlertCircle } from "lucide-react";
+import { AnimatedIcon } from "@/components/AnimatedIcon";
+import { Card3D } from "@/components/Card3D";
 
 const Dashboard = () => {
   const stats = [
@@ -10,6 +12,7 @@ const Dashboard = () => {
       change: "+12%",
       icon: Users,
       color: "text-primary",
+      glow: "primary" as const,
     },
     {
       title: "Pending Admissions",
@@ -17,6 +20,7 @@ const Dashboard = () => {
       change: "+8%",
       icon: GraduationCap,
       color: "text-warning",
+      glow: "warning" as const,
     },
     {
       title: "Fee Collection",
@@ -24,6 +28,7 @@ const Dashboard = () => {
       change: "+15%",
       icon: CreditCard,
       color: "text-success",
+      glow: "success" as const,
     },
     {
       title: "Hostel Occupancy",
@@ -31,6 +36,7 @@ const Dashboard = () => {
       change: "+2%",
       icon: Building2,
       color: "text-primary",
+      glow: "accent" as const,
     },
   ];
 
@@ -59,37 +65,58 @@ const Dashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
-          <Card key={stat.title} className="border-0 shadow-card">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="w-4 h-4 text-success" />
-                    <span className="text-sm text-success font-medium">{stat.change}</span>
+        {stats.map((stat, index) => (
+          <Card3D key={stat.title} className="border-0 shadow-card animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
+            <Card className="border-0 shadow-none bg-transparent">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <AnimatedIcon 
+                        icon={TrendingUp} 
+                        className="w-4 h-4 text-success" 
+                        glowType="success"
+                        animationType="pulse"
+                        delay={index * 150 + 500}
+                      />
+                      <span className="text-sm text-success font-medium">{stat.change}</span>
+                    </div>
+                  </div>
+                  <div className={`p-3 rounded-lg bg-accent ${stat.color} card-3d`}>
+                    <AnimatedIcon 
+                      icon={stat.icon} 
+                      className="w-6 h-6" 
+                      glowType={stat.glow}
+                      animationType="bounce"
+                      delay={index * 200 + 1000}
+                    />
                   </div>
                 </div>
-                <div className={`p-3 rounded-lg bg-accent ${stat.color}`}>
-                  <stat.icon className="w-6 h-6" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Card3D>
         ))}
       </div>
 
       {/* Recent Activity Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Admissions */}
-        <Card className="border-0 shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Recent Admissions
-            </CardTitle>
-          </CardHeader>
+        <Card3D className="border-0 shadow-card">
+          <Card className="border-0 shadow-none bg-transparent">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AnimatedIcon 
+                  icon={Users} 
+                  className="w-5 h-5" 
+                  glowType="primary"
+                  animationType="float"
+                  delay={1500}
+                />
+                Recent Admissions
+              </CardTitle>
+            </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentAdmissions.map((admission) => (
@@ -108,16 +135,24 @@ const Dashboard = () => {
               ))}
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </Card3D>
 
         {/* Fee Status */}
-        <Card className="border-0 shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="w-5 h-5" />
-              Fee Collection Status
-            </CardTitle>
-          </CardHeader>
+        <Card3D className="border-0 shadow-card">
+          <Card className="border-0 shadow-none bg-transparent">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AnimatedIcon 
+                  icon={CreditCard} 
+                  className="w-5 h-5" 
+                  glowType="success"
+                  animationType="float"
+                  delay={1700}
+                />
+                Fee Collection Status
+              </CardTitle>
+            </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-gradient-success text-success-foreground">
@@ -131,9 +166,15 @@ const Dashboard = () => {
               </div>
               
               <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
-                <div className="flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 text-warning" />
-                  <div>
+                  <div className="flex items-center gap-3">
+                    <AnimatedIcon 
+                      icon={AlertCircle} 
+                      className="w-5 h-5 text-warning" 
+                      glowType="warning"
+                      animationType="pulse"
+                      delay={2000}
+                    />
+                    <div>
                     <p className="text-sm font-medium text-foreground">Pending Payments</p>
                     <p className="text-xs text-muted-foreground">245 students have overdue fees</p>
                   </div>
@@ -152,18 +193,26 @@ const Dashboard = () => {
               </div>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </Card3D>
       </div>
 
       {/* Hostel and Exam Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-0 shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="w-5 h-5" />
-              Hostel Occupancy
-            </CardTitle>
-          </CardHeader>
+        <Card3D className="border-0 shadow-card">
+          <Card className="border-0 shadow-none bg-transparent">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AnimatedIcon 
+                  icon={Building2} 
+                  className="w-5 h-5" 
+                  glowType="accent"
+                  animationType="float"
+                  delay={2200}
+                />
+                Hostel Occupancy
+              </CardTitle>
+            </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {["Boys Hostel A", "Girls Hostel B", "PG Block C"].map((hostel, index) => (
@@ -182,15 +231,23 @@ const Dashboard = () => {
               ))}
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </Card3D>
 
-        <Card className="border-0 shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <GraduationCap className="w-5 h-5" />
-              Upcoming Examinations
-            </CardTitle>
-          </CardHeader>
+        <Card3D className="border-0 shadow-card">
+          <Card className="border-0 shadow-none bg-transparent">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AnimatedIcon 
+                  icon={GraduationCap} 
+                  className="w-5 h-5" 
+                  glowType="warning"
+                  animationType="float"
+                  delay={2400}
+                />
+                Upcoming Examinations
+              </CardTitle>
+            </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
@@ -210,7 +267,8 @@ const Dashboard = () => {
               ))}
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </Card3D>
       </div>
     </div>
   );
